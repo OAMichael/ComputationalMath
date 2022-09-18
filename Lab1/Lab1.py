@@ -144,8 +144,8 @@ def main():
         axes[i].tick_params(axis="y", labelsize=20)
         axes[i].set_xscale('log')
         axes[i].set_yscale('log')
-        axes[i].set_xlabel("$\log_{10} \; h_n$", fontsize=20)
-        axes[i].set_ylabel("$\log_{10} \; \epsilon$", fontsize=20)
+        axes[i].set_xlabel("$h_n$", fontsize=20)
+        axes[i].set_ylabel("$\epsilon$", fontsize=20)
         axes[i].set_visible(False)
 
     # The main filling loop
@@ -256,8 +256,8 @@ def main():
         for i in range(0, len(axes)):
             axes[i].set_xscale("linear"     if isLin else 'log')
             axes[i].set_yscale("linear"     if isLin else 'log')
-            axes[i].set_xlabel("$h_n$"      if isLin else "$\log_{10} \; h_n$", fontsize=20)
-            axes[i].set_ylabel("$\epsilon$" if isLin else "$\log_{10} \; \epsilon$", fontsize=20)
+            axes[i].set_xlabel("$h_n$"      if isLin else "$h_n$", fontsize=20)
+            axes[i].set_ylabel("$\epsilon$" if isLin else "$\epsilon$", fontsize=20)
             axes[i].autoscale()
     
     def change_scale(event):
