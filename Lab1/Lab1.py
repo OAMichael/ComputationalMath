@@ -114,11 +114,13 @@ def main():
     # A couple of lists to store information about buttons, axes and plots themselves
     buttons = []
     axes = []
+    button_axes = []
     plots_plots = []
     
     # Define and place buttons in correct location
     for i in range(0, len(functions_array)):
         ax_button = plt.axes([0.906, 0.8 - i * 0.06, 0.088, 0.05])
+        button_axes.append(ax_button)
         buttons.append(Button(ax_button, function_names_array[i], color='gold', hovercolor='skyblue'))
 
     # The same, but for a <Scale> button
@@ -169,7 +171,20 @@ def main():
         
             # Save figures if we need it
             if save:
-                fig.savefig(f"./Pictures/Function_{fig_num + 1}")
+                ax_slide.set_visible(False)
+                ax_scale_button.set_visible(False)
+                for btn in button_axes:
+                    btn.set_visible(False)
+
+                for ax in axes:
+                    ax.set_visible(True)
+                    fig.savefig(f"./Pictures/Function_{axes.index(ax) + 1}")
+                    ax.set_visible(False)
+
+                ax_slide.set_visible(True)
+                ax_scale_button.set_visible(True)
+                for btn in button_axes:
+                    btn.set_visible(True)
 
         except KeyboardInterrupt:
             return 0
