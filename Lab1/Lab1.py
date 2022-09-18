@@ -57,7 +57,7 @@ def f1_deriv(x):
 
 
 def f2_deriv(x):
-    return -np.sin(np.sin(x)) * np.sin(x)
+    return -np.sin(np.sin(x)) * np.cos(x)
 
 
 def f3_deriv(x):

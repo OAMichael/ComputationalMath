@@ -1,0 +1,5 @@
+\babel@toc {russian}{}
+\contentsline {section}{Цель}{3}{section*.2}%
+\contentsline {section}{Рабочие функции}{3}{section*.3}%
+\contentsline {section}{Графики и порядок точности}{5}{section*.5}%
+\contentsline {section}{Выводы}{8}{section*.11}%
