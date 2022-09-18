@@ -178,7 +178,7 @@ def main():
 
                 for ax in axes:
                     ax.set_visible(True)
-                    fig.savefig(f"./Pictures/Function_{axes.index(ax) + 1}")
+                    fig.savefig(f"./Pictures/Function_{axes.index(ax) + 1}.pdf")
                     ax.set_visible(False)
 
                 ax_slide.set_visible(True)
