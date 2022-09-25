@@ -109,7 +109,14 @@ def main():
     
     # Now let's define and configure a figure for plots
     fig = plt.figure(figsize=(12, 8))
-    fig.canvas.set_window_title('Functions')
+    try:
+        fig.canvas.manager.set_window_title('Functions')
+    except:
+        try:
+            fig.canvas.set_window_title('Functions')
+        except:
+            print("Unknown method for title in current Matplotlib version")
+            exit(1)
 
     # A couple of lists to store information about buttons, axes and plots themselves
     buttons = []
