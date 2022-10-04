@@ -42,7 +42,7 @@ def printMatrix(M):
                 else:
                     end_symbol = "  |"
 
-            print(start_symbol + "{:9.6f}".format(M[i, j]), end="")
+            print(start_symbol + "{:19.16f}".format(M[i, j]), end="")
             print(end_symbol + ("\n" if j == cols - 1 else "  "), end="")
 
     print("\n")
@@ -52,7 +52,7 @@ def printMatrix(M):
 def printVector(V):
     print("[ ", end="")
     for i in range(0, V.shape[0]):
-        print("{:6f}".format(float(V[i])), end="")
+        print("{:6.9f}".format(float(V[i])), end="")
         print(" ]\n" if i == V.shape[0] - 1 else "  ", end="")  
 
     print("\n")
@@ -144,6 +144,7 @@ def IsPositiveDefinite(A):
         M = A[:A.shape[0] - i, :A.shape[1] - i]
         if np.linalg.det(M) == 0:
             result = False
+            break
 
     return result
 
@@ -269,7 +270,7 @@ def UpperRelaxation(A, f, w=1.5, epsilon=1e-6, init_vector=np.array([[0] for i i
     V = np.matmul(M, (w - 1) * D + w * U)
 
     iterations = 0
-    while norm(f - np.matmul(A, curr_x)) > epsilon:
+    while norm(f - np.matmul(A, curr_x)) >= epsilon:
         prev_x = curr_x
         curr_x = -np.matmul(V, prev_x) + np.matmul(w * M, f)
         iterations += 1
@@ -293,6 +294,8 @@ def main():
     print(f"Maximum eigenvalue max|\u03bb| = {findMaxEigenvalue(A)}")
     print(f"Minimum eigenvalue min|\u03bb| = {findMinEigenvalue(A)}")
 
+    true_solution = np.linalg.solve(A, f)
+
     print("================================================STRAIGHT METHODS===============================================")
     if IsCholeskyCompatible(A):
         ### LL^T * x = f
@@ -303,22 +306,22 @@ def main():
         
 
         print("My solution:")
-        printVector(x)
+        printMatrix(x)
 
-        print(f"Residual in 1st norm = {normVec1(f - np.matmul(A, x))}")
-        print(f"Residual in 2nd norm = {normVec2(f - np.matmul(A, x))}")
-        print(f"Residual in 3rd norm = {normVec3(f - np.matmul(A, x))}")
+        print(f"Residual r in 1st norm = {normVec1(f - np.matmul(A, x))}")
+        print(f"Residual r in 2nd norm = {normVec2(f - np.matmul(A, x))}")
+        print(f"Residual r in 3rd norm = {normVec3(f - np.matmul(A, x))}")
         
 
     print("================================================ITERATIVE METHODS==============================================")
     if IsUpperRelaxationCompatible(A):
         print("Upper relaxation method\n\n")
 
-        accuracy = 1e-6
-        current_norm = normVec1
+        accuracy = 1e-16
+        current_norm = normVec3
         print("My solution:")
         x, iters = UpperRelaxation(A, f, w=1.5, epsilon=accuracy, norm=current_norm)
-        printVector(x)
+        printMatrix(x)
         
         print(f"Accuracy \u03b5 = {accuracy}")
         norm_num = "₁" if current_norm is normVec1 else "₂" if current_norm is normVec2 else"₃"
@@ -327,15 +330,15 @@ def main():
 
         print(f"Iterations = {iters}")
 
-        print(f"Residual in 1st norm = {normVec1(f - np.matmul(A, x))}")
-        print(f"Residual in 2nd norm = {normVec2(f - np.matmul(A, x))}")
-        print(f"Residual in 3rd norm = {normVec3(f - np.matmul(A, x))}")
+        print(f"Residual r in 1st norm = {normVec1(f - np.matmul(A, x))}")
+        print(f"Residual r in 2nd norm = {normVec2(f - np.matmul(A, x))}")
+        print(f"Residual r in 3rd norm = {normVec3(f - np.matmul(A, x))}")
 
-    print("==================================================TRUE SOLUTION================================================")
-    printVector(np.linalg.solve(A, f))
+    print("============================================ALMOST TRUE SOLUTION (LIB)=========================================")
+    printMatrix(true_solution)
     
     eigenvals, eigenvecs = np.linalg.eig(A)
-    print(f"True maximum and minimum eigenvalues respectively: \nmax|\u03bb| = {np.max(eigenvals)} \nmin|\u03bb| = {np.min(eigenvals)}")
+    print(f"Almost true (lib) maximum and minimum eigenvalues respectively: \nmax|\u03bb| = {np.max(eigenvals)} \nmin|\u03bb| = {np.min(eigenvals)}")
 
     return 0
 
