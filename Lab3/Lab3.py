@@ -13,11 +13,11 @@ def Function1(x):
 
 # For [-1, 0]
 def Function1FPI(x):
-    return np.sqrt(np.exp(x) / 5)
+    return -np.sqrt(np.exp(x) / 5)
 
 # For [0, 1]
 def Function2FPI(x):
-    return -np.sqrt(np.exp(x) / 5)
+    return np.sqrt(np.exp(x) / 5)
 
 # For [4, 5]
 def Function3FPI(x):
@@ -185,13 +185,16 @@ def main():
     print(f"Iterations: {iterations}")
 
     solution1 = FixedPointIteration(-1.0, Function1FPI, iterations)
-    print(f"Solution on the [-1, 0]: x = " + "{:19.16f}".format(solution1) + f" with residual r = {np.abs(Function1(solution1))}")
+    res = np.abs(Function1(solution1))
+    print(f"Solution on the [-1, 0]: x = " + "{:19.16f}".format(solution1) + f" with residual r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
     
     solution2 = FixedPointIteration(0.0,  Function2FPI, iterations)
-    print(f"Solution on the [0,  1]: x = " + "{:19.16f}".format(solution2) + f" with residual r = {np.abs(Function1(solution2))}")
+    res = np.abs(Function1(solution2))
+    print(f"Solution on the [0,  1]: x = " + "{:19.16f}".format(solution2) + f" with residual r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
     
     solution3 = FixedPointIteration(4.0,  Function3FPI, iterations)
-    print(f"Solution on the [4,  5]: x = " + "{:19.16f}".format(solution3) + f" with residual r = {np.abs(Function1(solution3))}\n")
+    res = np.abs(Function1(solution3))
+    print(f"Solution on the [4,  5]: x = " + "{:19.16f}".format(solution3) + f" with residual r = {res}" + (" (< \u03b5ᶠ)\n" if res == 0.0 else "\n"))
 
 
     print("\033[32m------------------------------------------- BY PREDEFINED PRECISION -------------------------------------------\033[0m\n")
@@ -200,24 +203,27 @@ def main():
     print(f"Precision: \u03b5 = {epsilon}")
 
     solution1, iters1 = FixedPointIteration(-1.0, Function1FPI, epsilon=epsilon, byIters=False, func=Function1)
+    res = np.abs(Function1(solution1))
     print( "Solution on the [-1, 0]: x = " + 
            "{:19.16f}".format(solution1) + 
-           " with residual r = " + 
-           "{:19.15e}".format(np.abs(Function1(solution1))) + 
+           " with residual r = " + (" (< \u03b5ᶠ)" if res == 0.0 else "") + 
+           "{:19.15e}".format(res) + 
           f" and {iters1} iterations")
     
     solution2, iters2 = FixedPointIteration(0.0,  Function2FPI, epsilon=epsilon, byIters=False, func=Function1)
+    res = np.abs(Function1(solution2))
     print( "Solution on the [0,  1]: x = " + 
            "{:19.16f}".format(solution2) + 
-           " with residual r = " + 
-           "{:19.15e}".format(np.abs(Function1(solution2))) + 
+           " with residual r = " + (" (< \u03b5ᶠ)" if res == 0.0 else "") + 
+           "{:19.15e}".format(res) + 
           f" and {iters2} iterations" )
     
     solution3, iters3 = FixedPointIteration(4.0,  Function3FPI, epsilon=epsilon, byIters=False, func=Function1)
+    res = np.abs(Function1(solution3))
     print( "Solution on the [4,  5]: x = " + 
-           "{:19.16f}".format(solution3) + 
+           "{:19.16f}".format(solution3) + (" (< \u03b5ᶠ)" if res == 0.0 else "") + 
            " with residual r = " + 
-           "{:19.15e}".format(np.abs(Function1(solution3))) + 
+           "{:19.15e}".format(res) + 
           f" and {iters3} iterations\n" )
 
 
@@ -238,13 +244,16 @@ def main():
     iterations = 20
     print(f"Iterations: {iterations}")
 
-    start = np.array([[0.0], [0.0]])
+    start = np.array([[0.4], [-0.3]])
     solution4 = NewtonMethod(start, F1, J1, iterations)
     printMatrix(solution4, shape=False)
 
-    print(f"Residual in 1st norm: r = {normVec1(F1(solution4))}")
-    print(f"Residual in 2nd norm: r = {normVec2(F1(solution4))}")
-    print(f"Residual in 3rd norm: r = {normVec3(F1(solution4))}")
+    res = normVec1(F1(solution4))
+    print(f"Residual in 1st norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
+    res = normVec2(F1(solution4))
+    print(f"Residual in 2nd norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
+    res = normVec3(F1(solution4))
+    print(f"Residual in 3rd norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
 
 
     print("\033[32m------------------------------------------- BY PREDEFINED PRECISION -------------------------------------------\033[0m\n")
@@ -259,7 +268,8 @@ def main():
 
 
     print(f"Iterations performed: {iters4}")
-    print(f"Residual in corresponding {norm_num} norm: r = {curr_norm(F1(solution4))}\n")
+    res = curr_norm(F1(solution4))
+    print(f"Residual in corresponding {norm_num} norm: r = {res}" + (" (< \u03b5ᶠ)\n" if res == 0.0 else "\n"))
 
 
 
@@ -283,13 +293,16 @@ def main():
     iterations = 20
     print(f"Iterations: {iterations}")
 
-    start = np.array([[1.0], [-1.0]])
+    start = np.array([[1.4], [-1.5]])
     solution5 = NewtonMethod(start, F2, J2, iterations)
     printMatrix(solution5, shape=False)
 
-    print(f"Residual in 1st norm: r = {normVec1(F2(solution5))}")
-    print(f"Residual in 2nd norm: r = {normVec2(F2(solution5))}")
-    print(f"Residual in 3rd norm: r = {normVec3(F2(solution5))}")
+    res = normVec1(F2(solution5))
+    print(f"Residual in 1st norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
+    res = normVec2(F2(solution5))
+    print(f"Residual in 2nd norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
+    res = normVec3(F2(solution5))
+    print(f"Residual in 3rd norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
 
 
     print("\033[32m------------------------------------------- BY PREDEFINED PRECISION -------------------------------------------\033[0m\n")
@@ -305,7 +318,8 @@ def main():
 
 
     print(f"Iterations performed: {iters5}")
-    print(f"Residual in corresponding {norm_num} norm: r = {curr_norm(F2(solution5))}")
+    res = curr_norm(F2(solution5))
+    print(f"Residual in corresponding {norm_num} norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
 
 
 
@@ -315,13 +329,16 @@ def main():
     iterations = 20
     print(f"Iterations: {iterations}")
 
-    start = np.array([[3.5], [2.5]])
+    start = np.array([[3.5], [2.3]])
     solution5 = NewtonMethod(start, F2, J2, iterations)
     printMatrix(solution5, shape=False)
 
-    print(f"Residual in 1st norm: r = {normVec1(F2(solution5))}")
-    print(f"Residual in 2nd norm: r = {normVec2(F2(solution5))}")
-    print(f"Residual in 3rd norm: r = {normVec3(F2(solution5))}")
+    res = normVec1(F2(solution5))
+    print(f"Residual in 1st norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
+    res = normVec2(F2(solution5))
+    print(f"Residual in 2nd norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
+    res = normVec3(F2(solution5))
+    print(f"Residual in 3rd norm: r = {res}" + (" (< \u03b5ᶠ)" if res == 0.0 else ""))
 
 
     print("\033[32m------------------------------------------- BY PREDEFINED PRECISION -------------------------------------------\033[0m\n")
@@ -336,7 +353,8 @@ def main():
     printMatrix(solution5, shape=False)
 
     print(f"Iterations performed: {iters5}")
-    print(f"Residual in corresponding {norm_num} norm: r = {curr_norm(F2(solution5))}\n")
+    res = curr_norm(F2(solution5))
+    print(f"Residual in corresponding {norm_num} norm: r = {res}" + (" (< \u03b5ᶠ)\n" if res == 0.0 else "\n"))
 
     return
 
