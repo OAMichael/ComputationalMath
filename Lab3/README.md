@@ -12,7 +12,7 @@ $$
 	\begin{cases}
 		\sin(x + 1) - y = 1.2,\\
 		2x + \cos y = 2;
-	\end{cases}\hspace{30mm}
+	\end{cases}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 	\begin{cases}
 		2x^2 - xy - 5x + 1 = 0,\\
 		x + 3\lg x - y^2 = 0.
