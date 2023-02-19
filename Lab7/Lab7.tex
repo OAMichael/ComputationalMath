@@ -1,0 +1,28 @@
+\include{./Include/Preambule.tex}
+\newcommand{\tocsection}[1]{\section*{#1} \addcontentsline{toc}{section}{#1}}
+\newcommand{\tocsubsection}[1]{\subsection*{#1} \addcontentsline{toc}{subsection}{#1}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+\def\fillandplacepagenumber{%
+	\par\pagestyle{empty}%
+	\vbox to 0pt{\vss}\vfill
+	\vbox to 0pt{\baselineskip0pt
+		\hbox to\linewidth{\hss}%
+		\baselineskip\footskip
+		\hbox to\linewidth{%
+			\hfil\thepage\hfil}\vss}}
+
+\begin{document}
+		\include{./Include/Title.tex}
+		\tableofcontents
+		\newpage
+		
+		\tocsection{Цель}
+		\tocsection{Теоретические сведения}
+		
+		\tocsubsection{Общая задача}
+		
+		\tocsection{Вывод}
+		
+		
+\end{document}
