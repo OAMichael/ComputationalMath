@@ -4,81 +4,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-J = np.empty([6, 6])
-h = 1e-4
-
-
 def Deriv3Order(f, x, h):
     return (4 / 3 * (f(x + h) - f(x - h)) / 2 / h - 1 / 3 * (f(x + 2 * h) - f(x - 2 * h)) / 4 / h)
-
-### -----------------------------------------------------------------------------------------------------------
-
-### -------------------------- Section with functions to use Radau's method ------------------------------------
-
-### -----------------------------------------------------------------------------------------------------------
-def CalcJacobianForRadau(F, y):
-
-    TotalLen = len(y)
-    for i in range(0, TotalLen):
-        for j in range(0, TotalLen):
-            def F_i(y):
-                return F(y)[i, 0]
-
-
-            def dFi_dyj(y):
-                def F_i_of_y_j(y_j):
-                    tmp = np.concatenate((y[:j], [[y_j]], y[(j+1):]))
-                    return F_i(tmp)
-
-                return Deriv3Order(F_i_of_y_j, y[j, 0], h)
-
-            J[i, j] = dFi_dyj(y)
-
-    return J
-
-
-def NewtonMethod(start, F, iterations=3):
-    x = start
-
-    J = CalcJacobianForRadau(F, x)
-    for n in range(0, iterations):
-        x = x - np.matmul(np.linalg.inv(J), F(x))
-        J = CalcJacobianForRadau(F, x)
-    return x
-
-
-
-def FixedPointIteration(start, method, epsilon=1e-4):
-    x = start
-
-    iters = 0
-    while normVec(method(x) - x) > epsilon and iters < 100:
-        x = method(x)
-        iters += 1
-
-    return x
-
-
-def Radau3Order(x_n, y_n, h, f):
-    def F(u):
-        f_1 = np.array([[u[0, 0]], [u[1, 0]], [u[2, 0]]])
-        f_2 = np.array([[u[3, 0]], [u[4, 0]], [u[5, 0]]])
-
-        tmp1 = f(x_n + h/3, y_n + h/12 * (5 * f_1 - f_2))
-        tmp2 = f(x_n + h,   y_n + h/12 * (3 * f_1 + f_2))
-
-        return np.concatenate((tmp1, tmp2))
-
-
-    start = np.concatenate((y_n, y_n))
-    #tmp = NewtonMethod(start, F)
-    tmp = FixedPointIteration(start, F, h)
-
-
-    f_1 = np.array([[tmp[0, 0]], [tmp[1, 0]], [tmp[2, 0]]])
-    f_2 = np.array([[tmp[3, 0]], [tmp[4, 0]], [tmp[5, 0]]])
-
-    return y_n + h/4 * (3 * f_1 + f_2)
 
 
 ### -----------------------------------------------------------------------------------------------------------
@@ -95,9 +22,9 @@ beta_31 = a
 beta    = a * (6 * a * a - 3 * a + 2) / (6 * a * a - 6 * a + 1)
 
 beta_32 = beta - a
-p_1 = a
-p_3 = (6 * a * a - 6 * a + 1) / (6 * a * (beta - a))
-p_2 = (1 - 2 * a - 2 * beta * p_3) / (2 * a)
+p_1     = a
+p_3     = (6 * a * a - 6 * a + 1) / (6 * a * (beta - a))
+p_2     = (1 - 2 * a - 2 * beta * p_3) / (2 * a)
 
 
 
@@ -162,6 +89,7 @@ def CalcMatrixForRosenbrock(x_n, y_n, h, f):
 
     return np.identity(Len) - a * h * Jac
 
+
 def Rosenbrock(x_n, y_n, h, f):
     D_n = CalcMatrixForRosenbrock(x_n, y_n, h, f)
 
@@ -192,15 +120,18 @@ def Oregonator(independVar, phaseVec):
     return np.array([[new_x_component], [new_y_component], [new_z_component]])
 
 
+
 def main():
     start = np.array([[4], [1.1], [4]])
+    h = 1e-2
+
 
     solution_points = [start]
     independ_points = [0.0]
 
     N = 80000
     for i in range(0, N):
-        new_point = Radau3Order(independ_points[i], solution_points[i], h, Oregonator)
+        new_point = Rosenbrock(independ_points[i], solution_points[i], h, Oregonator)
 
         solution_points.append(new_point)
         independ_points.append(h * (i + 1))
@@ -221,7 +152,18 @@ def main():
     plt.plot(independ_points, zs, color='green', linewidth=2, label='Вещество Z')
 
 
+
+    plt.title('Модель орегонатора', fontsize=24)
+    plt.xlabel('Время, с', fontsize=20)
+    plt.ylabel('Концентрация', fontsize=20)
+
+    plt.xlim([0, 800])
+
     plt.ticklabel_format(style='plain')
+    plt.xticks(np.arange(0, 801, step=100), fontsize=18)
+    plt.yticks(fontsize=18)
+
+    plt.minorticks_on()
 
     plt.grid(which='major', color='black', linestyle='-')
     plt.grid(which='minor', color='0.65', linestyle='--', linewidth=0.1)
