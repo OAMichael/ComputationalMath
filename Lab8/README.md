@@ -4,7 +4,7 @@
 #### В работе решается краевая задача 
 $$
 	\begin{cases*}
-		y'' - x\sqrt{y} = 0, \;\;\;\;\;\;\; 0 \leqslant x \leqslant 1, \\
+		y'' - x\sqrt{y} = 0, &emsp;&emsp;&emsp; 0 \leqslant x \leqslant 1, \\
 		y(0) = 0, \\
 		\displaystyle\int\limits_{0}^{1} y(x)dx = 1.
 	\end{cases*}

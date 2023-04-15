@@ -9,14 +9,14 @@ $$
 $$
 	\begin{cases}
 		k(x) = e^{-x}, \\
-		q(x) = x^3, \;\;\;\;\;\;\;\;\;\; x < x_0 \\
+		q(x) = x^3, &emsp;&emsp;&emsp;&emsp; x < x_0 \\
 		f(x) = x^2 - 1,
 	\end{cases}
 $$		
 $$	
 	\begin{cases}
 		k(x) = e^{-x}, \\
-		q(x) = x, \;\;\;\;\;\;\;\;\;\; x > x_0 \\
+		q(x) = x, &emsp;&emsp;&emsp;&emsp; x > x_0 \\
 		f(x) = 1,
 	\end{cases}
 $$
